@@ -35,15 +35,15 @@ public class SwerveModule {
         this.angleOffset = moduleConstants.angleOffset;
         
         /* Angle Encoder Config */
-        angleEncoder = new CANCoder(moduleConstants.cancoderID, Constants.Swerve.CANivore);
+        angleEncoder = new CANCoder(moduleConstants.cancoderID); //, Constants.Swerve.CANivore
         configAngleEncoder();
 
         /* Angle Motor Config */
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Constants.Swerve.CANivore);
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID);// , Constants.Swerve.CANivore
         configAngleMotor();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants.Swerve.CANivore);
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);//, Constants.Swerve.CANivore);
         configDriveMotor();
 
         lastAngle = getState().angle;
