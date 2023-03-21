@@ -36,7 +36,7 @@ public final class Constants {
   public static final class Swerve {
     
    // public static final int pigeonID = 1;
-    public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+    public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW- // I belive Navx is true
     
     public static final String CANivore = "CANt_open_file";// name of the canivore
 
