@@ -94,6 +94,9 @@ public class RobotContainer {
     setUpEventMap();
     autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(2, 2)));
     autoChooser_Path.addOption("Not_Simple", PathPlanner.loadPathGroup("Not_Simple", new PathConstraints(2, 2)));
+    autoChooser_Path.addOption("Score_Backup", PathPlanner.loadPathGroup("Score_Backup", new PathConstraints(2, 2)));
+    autoChooser_Path.addOption("Score_Charge", PathPlanner.loadPathGroup("Score_Charge", new PathConstraints(2, 2)));
+    
     autoTab.add(autoChooser_Path);
 
   }
