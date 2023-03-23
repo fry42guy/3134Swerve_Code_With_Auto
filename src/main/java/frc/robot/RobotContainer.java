@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoShoot;
 import frc.robot.commands.IntakeFWD;
 import frc.robot.commands.IntakeREV;
 import frc.robot.commands.Intake_ADV_BREAK_MODE;
 import frc.robot.commands.PIDHorizontalCommand;
+import frc.robot.commands.PIDHorizontalCommand_Auto;
 import frc.robot.commands.PIDVerticalCommand;
+import frc.robot.commands.PIDVerticalCommand_Auto;
 import frc.robot.commands.PIDWristCommand;
+import frc.robot.commands.PIDWristCommand_Auto;
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.ManualModeCommands.HorizontalManualMode_In;
@@ -42,6 +46,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -104,35 +110,35 @@ public class RobotContainer {
   public void setUpEventMap() { // put actions here
     Constants.AutoConstants.eventMap.clear();
 
-//     Constants.AutoConstants.eventMap.put("ScoreMid", new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
-//     new ParallelCommandGroup( 
-//   ( new PIDVerticalCommand_Auto(m_Vertical, Constants.Cone_Cube_MID_Vert+ Constants.Vertical_PID_Tolerance_Offset)),
-//   (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Cube_MID_Hori+ Constants.Horizontal_PID_Tolerance_Offset)),
-//   ( new PIDWristCommand_Auto(m_Wrist, Constants.Cone_Cube_MID_Wrist+Constants.Wrist_PID_Tolerance_Offset))),
+    Constants.AutoConstants.eventMap.put("ScoreMid", new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
+    new ParallelCommandGroup( 
+  ( new PIDVerticalCommand_Auto(m_Vertical, Constants.Cone_Cube_MID_Vert+ Constants.Vertical_PID_Tolerance_Offset)),
+  (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Cube_MID_Hori+ Constants.Horizontal_PID_Tolerance_Offset)),
+  ( new PIDWristCommand_Auto(m_Wrist, Constants.Cone_Cube_MID_Wrist+Constants.Wrist_PID_Tolerance_Offset))),
 
-//   new ParallelCommandGroup(
-//   new AutoShoot(m_ArmIntakeSubsystem, .3, 1)))
-// );
+  new ParallelCommandGroup(
+  new AutoShoot(m_ArmIntakeSubsystem, .3, 1)))
+);
 
 
-// Constants.AutoConstants.eventMap.put("Stoe",   new ParallelCommandGroup(
+Constants.AutoConstants.eventMap.put("Stoe",   new ParallelCommandGroup(
       
     
-//       (new PIDVerticalCommand_Auto(m_Vertical, Constants.Store_Stoe_Vert + Constants.Vertical_PID_Tolerance_Offset)),
-//           (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Store_Stoe_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
-//           (new PIDWristCommand_Auto(m_Wrist, Constants.Store_Stoe_Wrist+Constants.Wrist_PID_Tolerance_Offset))
-//        ));
+      (new PIDVerticalCommand_Auto(m_Vertical, Constants.Store_Stoe_Vert + Constants.Vertical_PID_Tolerance_Offset)),
+          (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Store_Stoe_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
+          (new PIDWristCommand_Auto(m_Wrist, Constants.Store_Stoe_Wrist+Constants.Wrist_PID_Tolerance_Offset))
+       ));
     
     
-//        Constants.AutoConstants.eventMap.put("FloorPickup",   new ParallelCommandGroup(
+       Constants.AutoConstants.eventMap.put("FloorPickup",   new ParallelCommandGroup(
       
     
-//         (new PIDVerticalCommand_Auto(m_Vertical, Constants.Floor_Cube_Cone_Vert + Constants.Vertical_PID_Tolerance_Offset)),
-//             (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cube_Cone_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
-//             (new PIDWristCommand_Auto(m_Wrist, Constants.Floor_Cube_Cone_Wrist+Constants.Wrist_PID_Tolerance_Offset))
-//          ));
+        (new PIDVerticalCommand_Auto(m_Vertical, Constants.Floor_Cube_Cone_Vert + Constants.Vertical_PID_Tolerance_Offset)),
+            (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cube_Cone_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
+            (new PIDWristCommand_Auto(m_Wrist, Constants.Floor_Cube_Cone_Wrist+Constants.Wrist_PID_Tolerance_Offset))
+         ));
 
-//          Constants.AutoConstants.eventMap.put("IntakeCone", new ParallelCommandGroup(new AutoShoot(m_ArmIntakeSubsystem, .3, 2)));
+         Constants.AutoConstants.eventMap.put("IntakeCone", new ParallelCommandGroup(new AutoShoot(m_ArmIntakeSubsystem, .3, 2)));
 
 
 
