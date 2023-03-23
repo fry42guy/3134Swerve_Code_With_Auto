@@ -160,7 +160,7 @@ public void scheduleDefaultTeleop() {
  
           () -> -m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
           () -> -m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
-          () -> m_Drive_Controller.getRightX(), 
+          () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX()), 
           () -> false //() -> robotCentric.getAsBoolean() //always field centric
       )
   );
