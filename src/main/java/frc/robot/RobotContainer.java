@@ -4,10 +4,28 @@
 
 package frc.robot;
 
+import frc.robot.commands.IntakeFWD;
+import frc.robot.commands.IntakeREV;
+import frc.robot.commands.Intake_ADV_BREAK_MODE;
+import frc.robot.commands.PIDHorizontalCommand;
+import frc.robot.commands.PIDVerticalCommand;
+import frc.robot.commands.PIDWristCommand;
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.ManualModeCommands.HorizontalManualMode_In;
+import frc.robot.commands.ManualModeCommands.HorizontalManualMode_Out;
+import frc.robot.commands.ManualModeCommands.VerticalManualMode_Down;
+import frc.robot.commands.ManualModeCommands.VerticalManualMode_Up;
+import frc.robot.commands.ManualModeCommands.WristManualMode_Down;
+import frc.robot.commands.ManualModeCommands.WristManualMode_Up;
+import frc.robot.subsystems.AirMod;
+import frc.robot.subsystems.ArmIntakeSubsystem;
+import frc.robot.subsystems.HorizontalSubsystem;
+import frc.robot.subsystems.LED_Lights_SubSystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.VerticalSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 import java.util.List;
 
@@ -43,6 +61,18 @@ public class RobotContainer {
 
     private final XboxController m_Operator_Controller = new XboxController(1);
 
+    private final AirMod M_PCM = new AirMod();
+
+    private final LED_Lights_SubSystem m_LED = new LED_Lights_SubSystem();
+  
+    private final WristSubsystem m_Wrist = new WristSubsystem();
+  
+    private final VerticalSubsystem m_Vertical = new VerticalSubsystem();
+  
+    private final HorizontalSubsystem m_Horizontal = new HorizontalSubsystem();
+  
+    private final ArmIntakeSubsystem m_ArmIntakeSubsystem = new ArmIntakeSubsystem();
+
     SendableChooser<List<PathPlannerTrajectory>> autoChooser_Path = new SendableChooser<>(); 
   //private String m_AutoSelected_Path;
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -56,7 +86,7 @@ public class RobotContainer {
     CameraServer.startAutomaticCapture(0);
     setUpEventMap();
     configureBindings();
-
+    m_ArmIntakeSubsystem.setDefaultCommand(new Intake_ADV_BREAK_MODE(m_ArmIntakeSubsystem));
   }
 
 
@@ -161,6 +191,239 @@ public void zeroGyro() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
    new JoystickButton(m_Drive_Controller, XboxController.Button.kRightStick.value) .onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+  
+   new Trigger(() ->
+   {if(m_Operator_Controller.getLeftTriggerAxis() >0)
+    return true;
+    else
+    {
+      return false;
+    }
+   
+   }
+   ).onTrue(new InstantCommand(
+   ()-> M_PCM.ClawClose()));
+
+new JoystickButton(m_Operator_Controller, XboxController.Button.kLeftBumper.value)
+.onTrue(new InstantCommand(
+()-> M_PCM.ClawOpen()
+));
+
+new JoystickButton(m_Operator_Controller, XboxController.Button.kX.value)
+.onTrue(new InstantCommand(
+()-> m_LED.LED_puple()
+));
+
+new JoystickButton(m_Operator_Controller, XboxController.Button.kY.value)
+.onTrue(new InstantCommand(
+()-> m_LED.LED_yellow()
+));
+
+  
+new Trigger(()->
+     
+{
+  if(m_Drive_Controller.getRightTriggerAxis() > 0)
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Store_Stoe_Vert + Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Store_Stoe_Hori + Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Store_Stoe_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+new Trigger(()->
+
+{
+  if(m_Drive_Controller.getLeftBumper())
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Floor_Cube_Cone_Vert+ Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Floor_Cube_Cone_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Floor_Cube_Cone_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+new Trigger(()->
+
+{
+  if(m_Drive_Controller.getBButton())
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cube_High_Vert+ Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cube_high_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cube_High_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+new Trigger(()->
+
+{  
+  if(m_Drive_Controller.getLeftTriggerAxis() > 0)
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_MID_Vert+ Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_MID_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_MID_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+
+new Trigger(()->
+
+{
+  if(m_Drive_Controller.getXButton())
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_High_Vert+ Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_High_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_High_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+
+
+new Trigger(()->
+
+{
+  if(m_Drive_Controller.getRightBumper())
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_Travel_Vert+ Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_Travel_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_Travel_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+new Trigger(()->
+
+{
+  if(m_Drive_Controller.getYButton())
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_Player_Station_Vert+ Constants.Vertical_PID_Tolerance_Offset))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_Player_Station_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_Player_Station_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+
+new Trigger(()->
+
+{
+  if(m_Drive_Controller.getAButton())
+    return true;
+  else
+    return false;
+
+})
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.BB_Virt))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.BB_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.BB_Wrist));
+
+  
+new Trigger(() ->
+{if(m_Operator_Controller.getRightTriggerAxis()>0)
+ return true;
+ else
+ {
+   return false;
+ }
+
+}
+).whileTrue(new IntakeFWD(m_ArmIntakeSubsystem));
+
+
+
+new Trigger(() ->
+{if(m_Operator_Controller.getRightBumper() &! m_Operator_Controller.getLeftStickButton())
+ return true;
+ else
+ {
+   return false;
+ }
+
+}
+).whileTrue(new IntakeREV(m_ArmIntakeSubsystem));
+
+
+new Trigger(() -> 
+
+{if (m_Operator_Controller.getLeftStickButton()&& m_Operator_Controller.getAButton())
+
+return true;
+else
+return false;
+}
+).whileTrue(new VerticalManualMode_Down (m_Vertical));
+
+
+new Trigger(() ->
+{if (m_Operator_Controller.getLeftStickButton()&& m_Operator_Controller.getBButton())
+
+ return true;
+ else
+  return false;
+ }
+ ).whileTrue(new VerticalManualMode_Up (m_Vertical));
+
+
+//
+new Trigger(() -> 
+
+{if (m_Operator_Controller.getLeftStickButton()&& m_Operator_Controller.getRightBumper())
+
+return true;
+else
+return false;
+}
+).whileTrue(new HorizontalManualMode_Out (m_Horizontal));
+
+
+new Trigger(() ->
+{if (m_Operator_Controller.getLeftStickButton()&& m_Operator_Controller.getLeftBumper())
+
+ return true;
+ else
+  return false;
+ }
+ ).whileTrue(new HorizontalManualMode_In (m_Horizontal));
+  
+//
+
+new Trigger(() -> 
+
+{if (m_Operator_Controller.getLeftStickButton()&& m_Operator_Controller.getYButton())
+
+return true;
+else
+return false;
+}
+).whileTrue(new WristManualMode_Up (m_Wrist));
+
+
+new Trigger(() ->
+{if (m_Operator_Controller.getLeftStickButton()&& m_Operator_Controller.getXButton())
+
+ return true;
+ else
+  return false;
+ }
+ ).whileTrue(new WristManualMode_Down (m_Wrist));
+
+
+
+
+
+
+
+  
   }
 
   /**

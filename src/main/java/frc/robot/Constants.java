@@ -28,6 +28,87 @@ public final class Constants {
 
 
   public static final double stickDeadband = 0.05;
+  public static final int LED_PCM_CAN_ID = 20;
+
+  public static final int PCM_CAN_ID = 1 ;
+  public static final int Arm_Intake_Left_ID = 51;
+  public static final int Arm_Intake_Right_ID = 50;
+  public static final double Arm_intake_speed = .45;
+
+
+  public static final int m_Wrist = 44; // ArmMotor Falcon 500 CAN ID ###
+  public static final double Wrist_Motor_Speed = .2; 
+  public static final double Wrist_Limit_High = 123000;
+  public static final double Wrist_Limit_Low = 0;
+
+  public static final int m_Vertical = 45; // ArmMotor Falcon 500 CAN ID ###
+  public static final double Vertical_Motor_Speed = .4; 
+  public static final double Vertical_Motio_Accel = 100; //units per 100ms - 10- 100ms/sec 4000units/rev 
+  public static final double Vertical_Limit_High = 0;
+  public static final double Vertical_limit_Low = -190000;
+  
+  public static final double Vertical_High_Setpoint = -180000;
+  public static final double Vertical_Low_Setpoint = -4000;
+
+  public static final double Vertical_PID_Tolerance_Offset = 0;
+  public static final double Horizontal_PID_Tolerance_Offset = 0;
+  public static final double Wrist_PID_Tolerance_Offset = 0;
+
+
+  public static final double Wrist_High_Setpoint = 105000;
+  public static final double Wrist_cube_Highth = 100000;
+  public static final double Wrist_Low_Setpoint = 10000;
+  public static final double Wrist_PID_Speed = .3;
+
+
+  public static final int m_Horizontal = 46; // ArmMotor Falcon 500 CAN ID ###
+  public static final double Horizontal_Motor_Speed = .2; 
+  public static final double Horizontal_PID_Speed = .4;
+  public static final double Horizontal_Limit_High = 105000 ;
+  public static final double Horizontal_Limit_Low = 0;
+  
+  // Start/Stow (RT) new arm floor cube
+public static final double Store_Stoe_Vert = -4000;
+public static final double Store_Stoe_Wrist = 98000;
+public static final double Store_Stoe_Hori = 100;
+
+//BB(A) new arm
+public static final double BB_Virt = -4000;
+public static final double BB_Wrist =36300;
+public static final double BB_Hori = 100;  
+
+
+//Floor Pick up Cube/Cone(LB) new arm cone
+public static final double Floor_Cube_Cone_Vert = -4000;
+public static final double Floor_Cube_Cone_Wrist = 89368-2000;
+public static final double Floor_Cube_Cone_Hori = 100;
+
+//Score Cone/Cube MID (LT) new arm
+public static final double Cone_Cube_MID_Vert = -55000;
+public static final double Cone_Cube_MID_Wrist = 50095;
+public static final double Cone_Cube_MID_Hori = 80082;
+
+
+//Score Cone/Cube High (x) new arm cone shoot high
+public static final double Cone_Cube_High_Vert = -55000;//-168192;
+public static final double Cone_Cube_High_Wrist = 4500;//67000-20000-3000-3000;
+public static final double Cone_Cube_High_Hori = 600;//103018;
+
+//Travel w/Cone Cube(RB) new arm
+public static final double Cone_Cube_Travel_Vert = -4000;
+public static final double Cone_Cube_Travel_Wrist = 500;
+public static final double Cone_Cube_Travel_Hori = 100;
+
+//Pickup Player Station (B)cube high
+public static final double Cube_High_Vert = -177192;
+public static final double Cube_High_Wrist = 35000;
+public static final double Cube_high_Hori = 80000;
+
+//Pickup Player Station (Y) New arm cone cube
+public static final double Cone_Cube_Player_Station_Vert = -177192;
+public static final double Cone_Cube_Player_Station_Wrist = 65000;
+public static final double Cone_Cube_Player_Station_Hori = 00;
+
 
   public static class OperatorConstants {
     
