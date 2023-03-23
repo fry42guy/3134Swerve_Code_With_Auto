@@ -44,7 +44,7 @@ public class RobotContainer {
     private final XboxController m_Operator_Controller = new XboxController(1);
 
     SendableChooser<List<PathPlannerTrajectory>> autoChooser_Path = new SendableChooser<>(); 
-  private String m_AutoSelected_Path;
+  //private String m_AutoSelected_Path;
   // Replace with CommandPS4Controller or CommandJoystick if needed
   
   ShuffleboardTab autoTab = Shuffleboard.getTab("Autonomous");
@@ -62,8 +62,8 @@ public class RobotContainer {
 
   public void setUpAutos() {
     setUpEventMap();
-    autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(4.5, 3)));
-
+    autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(2, 2)));
+    autoChooser_Path.addOption("Not_Simple", PathPlanner.loadPathGroup("Not_Simple", new PathConstraints(2, 2)));
     autoTab.add(autoChooser_Path);
 
   }
