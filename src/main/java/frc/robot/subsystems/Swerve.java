@@ -156,7 +156,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         //gyro.setYaw(0);
-        gyro.setAngleAdjustment(0);
+        gyro.setAngleAdjustment(180);
     }
 
     public void reverseZeroGyro() {
