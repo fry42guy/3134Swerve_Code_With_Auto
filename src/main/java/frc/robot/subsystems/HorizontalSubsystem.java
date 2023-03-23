@@ -26,7 +26,7 @@ horizontalmotor.configForwardSoftLimitThreshold(Constants.Horizontal_Limit_High)
 horizontalmotor.configReverseSoftLimitThreshold(Constants.Horizontal_Limit_Low);
 horizontalmotor.configForwardSoftLimitEnable(true);
 horizontalmotor.configReverseSoftLimitEnable(true);
-horizontalmotor.setNeutralMode(NeutralMode.Coast);
+horizontalmotor.setNeutralMode(NeutralMode.Brake);
 
 
 

@@ -29,7 +29,7 @@ Verticalmotor.configReverseSoftLimitThreshold(Constants.Vertical_limit_Low);
 Verticalmotor.configForwardSoftLimitThreshold(Constants.Vertical_Limit_High);
 Verticalmotor.configForwardSoftLimitEnable(true);
 Verticalmotor.configReverseSoftLimitEnable(true);
-Verticalmotor.setNeutralMode(NeutralMode.Coast);
+Verticalmotor.setNeutralMode(NeutralMode.Brake);
 ///////////////*************///////////////
 
   }
