@@ -90,9 +90,9 @@ public static final double Cone_Cube_MID_Hori = 80082;
 
 
 //Score Cone/Cube High (x) new arm cone shoot high
-public static final double Cone_Cube_High_Vert = -55000;//-168192;
-public static final double Cone_Cube_High_Wrist = 4500;//67000-20000-3000-3000;
-public static final double Cone_Cube_High_Hori = 600;//103018;
+public static final double Cone_Cube_High_Vert = -150000;//-168192;
+public static final double Cone_Cube_High_Wrist = 35000;//67000-20000-3000-3000;
+public static final double Cone_Cube_High_Hori = 103018;
 
 //Travel w/Cone Cube(RB) new arm
 public static final double Cone_Cube_Travel_Vert = -4000;
