@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.AutoShoot;
+import frc.robot.commands.Auto_Balance_With_Nav_X;
 import frc.robot.commands.IntakeFWD;
 import frc.robot.commands.IntakeREV;
 import frc.robot.commands.Intake_ADV_BREAK_MODE;
@@ -14,6 +16,7 @@ import frc.robot.commands.PIDVerticalCommand;
 import frc.robot.commands.PIDVerticalCommand_Auto;
 import frc.robot.commands.PIDWristCommand;
 import frc.robot.commands.PIDWristCommand_Auto;
+import frc.robot.commands.PIDWristCommand_Auto_Timed;
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.ManualModeCommands.HorizontalManualMode_In;
@@ -89,7 +92,7 @@ public class RobotContainer {
   public RobotContainer() {
    
     // Configure the trigger bindings
-    CameraServer.startAutomaticCapture(0);
+   // CameraServer.startAutomaticCapture(0);
     setUpEventMap();
     configureBindings();
     m_ArmIntakeSubsystem.setDefaultCommand(new Intake_ADV_BREAK_MODE(m_ArmIntakeSubsystem));
@@ -98,11 +101,12 @@ public class RobotContainer {
 
   public void setUpAutos() {
     setUpEventMap();
-    autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(2, 2)));
-    autoChooser_Path.addOption("Not_Simple", PathPlanner.loadPathGroup("Not_Simple", new PathConstraints(2, 2)));
-    autoChooser_Path.addOption("Score_Backup", PathPlanner.loadPathGroup("Score_Backup", new PathConstraints(2, 2)));
-    autoChooser_Path.addOption("Score_Charge", PathPlanner.loadPathGroup("Score_Charge", new PathConstraints(2, 2)));
-    
+    autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("Not_Simple", PathPlanner.loadPathGroup("Not_Simple", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreHighCone_Backup", PathPlanner.loadPathGroup("ScoreHighCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreMidCone_Backup", PathPlanner.loadPathGroup("ScoreMidCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreHighCone_Cone_Charge", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreMid_Charge", PathPlanner.loadPathGroup("ScoreMid_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoTab.add(autoChooser_Path);
 
   }
@@ -110,38 +114,58 @@ public class RobotContainer {
   public void setUpEventMap() { // put actions here
     Constants.AutoConstants.eventMap.clear();
 
-    Constants.AutoConstants.eventMap.put("ScoreMid", new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
+    Constants.AutoConstants.eventMap.put("Shoot_Cone_Mid", new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
     new ParallelCommandGroup( 
-  ( new PIDVerticalCommand_Auto(m_Vertical, Constants.Cone_Cube_MID_Vert+ Constants.Vertical_PID_Tolerance_Offset)),
-  (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Cube_MID_Hori+ Constants.Horizontal_PID_Tolerance_Offset)),
-  ( new PIDWristCommand_Auto(m_Wrist, Constants.Cone_Cube_MID_Wrist+Constants.Wrist_PID_Tolerance_Offset))),
-
-  new ParallelCommandGroup(
-  new AutoShoot(m_ArmIntakeSubsystem, .3, 1)))
-);
-
-
-Constants.AutoConstants.eventMap.put("Stoe",   new ParallelCommandGroup(
-      
+    ( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
+    (new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
+    ( new PIDWristCommand_Auto(m_Wrist,50095-2000))),
     
-      (new PIDVerticalCommand_Auto(m_Vertical, Constants.Store_Stoe_Vert + Constants.Vertical_PID_Tolerance_Offset)),
-          (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Store_Stoe_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
-          (new PIDWristCommand_Auto(m_Wrist, Constants.Store_Stoe_Wrist+Constants.Wrist_PID_Tolerance_Offset))
+    new ParallelCommandGroup(
+    new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
+    );
+    
+Constants.AutoConstants.eventMap.put("Travel", new ParallelCommandGroup(
+
+  (new PIDVerticalCommand_Auto(m_Vertical, -200)),
+(new PIDHorizontalCommand_Auto(m_Horizontal, 100)),
+(new PIDWristCommand_Auto(m_Wrist, 500))));
+
+
+
+Constants.AutoConstants.eventMap.put("Cube_Floor_Pickup",   new SequentialCommandGroup(
+
+new ParallelCommandGroup( 
+      (new PIDVerticalCommand_Auto(m_Vertical, -1000)),
+          (new PIDHorizontalCommand_Auto(m_Horizontal, 100)),
+          (new PIDWristCommand_Auto(m_Wrist, 98000-1500))),
+
+          new ParallelCommandGroup(
+            new AutoShoot(m_ArmIntakeSubsystem, -.45, 1))
        ));
     
     
-       Constants.AutoConstants.eventMap.put("FloorPickup",   new ParallelCommandGroup(
+       Constants.AutoConstants.eventMap.put("Floor_Cone_Pickup",   new ParallelCommandGroup(
       
     
-        (new PIDVerticalCommand_Auto(m_Vertical, Constants.Floor_Cube_Cone_Vert + Constants.Vertical_PID_Tolerance_Offset)),
-            (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cube_Cone_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
-            (new PIDWristCommand_Auto(m_Wrist, Constants.Floor_Cube_Cone_Wrist+Constants.Wrist_PID_Tolerance_Offset))
-         ));
+        //(new PIDVerticalCommand_Auto(m_Vertical, -1000)),
+           // (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cone_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
+            (new PIDWristCommand_Auto(m_Wrist, 87368 -3000)),
+            (new AutoShoot(m_ArmIntakeSubsystem, -.45, 5))));
+    
+Constants.AutoConstants.eventMap.put("Shoot_Cone_High", new SequentialCommandGroup(
 
-         Constants.AutoConstants.eventMap.put("IntakeCone", new ParallelCommandGroup(new AutoShoot(m_ArmIntakeSubsystem, .3, 2)));
 
+new ParallelCommandGroup(
+ (new PIDVerticalCommand_Auto(m_Vertical,-150000-3500)),
+  (new PIDHorizontalCommand_Auto(m_Horizontal, 103018 )),
+  (new PIDWristCommand_Auto(m_Wrist,35000-10000))),
+  
+  
+  new ParallelCommandGroup(
+    new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
+);
 
-
+Constants.AutoConstants.eventMap.put("Auto_Balance", new Auto_Balance_With_Nav_X(s_Swerve));
   }
 
   /**
@@ -167,9 +191,9 @@ public void scheduleDefaultTeleop() {
           // () -> -modifyAxis(m_Drive_Controller.getLeftX()*.8), //* DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
           // () -> -modifyAxis(m_Drive_Controller.getRightX()*.7),// * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
  
-          () -> -m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
-          () -> -m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
-          () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX()), 
+          () -> m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
+          () -> m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
+          () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX())*-1, 
           () -> false //() -> robotCentric.getAsBoolean() //always field centric
       )
   );
@@ -218,6 +242,37 @@ new JoystickButton(m_Operator_Controller, XboxController.Button.kLeftBumper.valu
 ()-> M_PCM.ClawOpen()
 ));
 
+
+
+new JoystickButton(m_Drive_Controller, XboxController.Button.kStart.value)
+.onTrue((new Auto_Balance_With_Nav_X(s_Swerve)))
+.onFalse(new TeleopSwerve(
+  s_Swerve, 
+
+  () -> m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
+  () -> m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
+  () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX())*-1, 
+  () -> false //() -> robotCentric.getAsBoolean() //always field centric
+));
+
+new JoystickButton(m_Drive_Controller, XboxController.Button.kBack.value)
+.onTrue(new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
+new ParallelCommandGroup( 
+( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
+(new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
+( new PIDWristCommand_Auto(m_Wrist,50095-8000))),
+
+new ParallelCommandGroup(
+new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
+);
+
+
+
+
+
+
+
+
 new JoystickButton(m_Operator_Controller, XboxController.Button.kX.value)
 .onTrue(new InstantCommand(
 ()-> m_LED.LED_puple()
@@ -238,9 +293,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Store_Stoe_Vert + Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Store_Stoe_Hori + Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Store_Stoe_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cube_Floor_Pickup_Vert ))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cube_Floor_Pickup_Hori ))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cube_Floor_Pickup_Wrist));
 
 new Trigger(()->
 
@@ -251,9 +306,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Floor_Cube_Cone_Vert+ Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Floor_Cube_Cone_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Floor_Cube_Cone_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Floor_Cone_Vert))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Floor_Cone_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Floor_Cone_Wrist));
 
 new Trigger(()->
 
@@ -264,9 +319,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cube_High_Vert+ Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cube_high_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Cube_High_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cube_Player_Station_Vert))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cube_Player_Station_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cube_Player_Station_Wrist));
 
 new Trigger(()->
 
@@ -277,9 +332,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_MID_Vert+ Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_MID_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_MID_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_MID_Vert))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_MID_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_MID_Wrist));
 
 
 new Trigger(()->
@@ -291,9 +346,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_High_Vert+ Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_High_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_High_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Shoot_High_Vert))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Shoot_High_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Shoot_High_Wrist));
 
 
 
@@ -306,9 +361,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_Travel_Vert+ Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_Travel_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_Travel_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_Travel_Vert))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_Travel_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_Travel_Wrist));
 
 new Trigger(()->
 
@@ -319,9 +374,9 @@ new Trigger(()->
     return false;
 
 })
-.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_Player_Station_Vert+ Constants.Vertical_PID_Tolerance_Offset))
-.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_Player_Station_Hori+ Constants.Horizontal_PID_Tolerance_Offset))
-.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_Player_Station_Wrist+Constants.Wrist_PID_Tolerance_Offset));
+.onTrue(new PIDVerticalCommand(m_Vertical, Constants.Cone_Player_Station_Vert))
+.onTrue(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Player_Station_Hori))
+.onTrue(new PIDWristCommand(m_Wrist, Constants.Cone_Player_Station_Wrist));
 
 new Trigger(()->
 
@@ -458,7 +513,7 @@ public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
       s_Swerve::resetOdometry,
       Constants.Swerve.swerveKinematics,
       new PIDConstants(Constants.AutoConstants.kPXController, 0, 0),
-      new PIDConstants(Constants.AutoConstants.kPThetaController, 0, 0),
+      new PIDConstants(Constants.AutoConstants.kPThetaController, Constants.AutoConstants.kIThetaController, 0),
       s_Swerve::setModuleStates,
       Constants.AutoConstants.eventMap,
       true,

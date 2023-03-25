@@ -18,7 +18,7 @@ public class PIDWristCommand_Auto extends CommandBase {
   private double setPoint;
   public PIDWristCommand_Auto(WristSubsystem m_WristSubsystem, double setPoint) {
     this.m_WristSubsystem = m_WristSubsystem;
-    m_WristPIDController = new PIDController(.0004, 0.0000001, 0.0);
+    m_WristPIDController = new PIDController(.0004, 0.0000005, 0.0);
     
    // m_WristPIDController.enableContinuousInput(-1, 1);
     m_WristPIDController.setTolerance(1000);
@@ -38,29 +38,48 @@ public class PIDWristCommand_Auto extends CommandBase {
   @Override
   public void execute() 
   {
-    double feedforward = -0.05;
+    double feedforward = -0.08;
+
+
     double speed = m_WristPIDController.calculate(m_WristSubsystem.getAbsoluteEncoderCounts(), setPoint);
     speed = (speed > 0) ? speed + feedforward : speed - feedforward;
     speed = (speed > 1 ) ? 1.0 : speed;
     speed = (speed < -1 ) ? -1 : speed; 
     m_WristSubsystem.setSpeed(speed* Constants.Wrist_PID_Speed);
-    SmartDashboard.putNumber("Wrist output: ", speed);
+
+    SmartDashboard.putBoolean("Wrist True", m_WristPIDController.atSetpoint());
+   
+    //SmartDashboard.putBoolean("Wrist True", m_WristPIDController.atSetpoint());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) 
   {
-    m_WristSubsystem.setSpeed(0);
-  }
+    SmartDashboard.putBoolean("Wrist True", m_WristPIDController.atSetpoint());
+if (setPoint > 26000){
 
+    m_WristSubsystem.setSpeed(-.06);}
+  
+
+  else
+  { m_WristSubsystem.setSpeed(0.0);}
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_WristPIDController.atSetpoint())
-          return true;
-    return false;
+    
+    if(m_WristPIDController.atSetpoint()){
 
+      System.out.println("wrist "+m_WristPIDController.atSetpoint());
+    
+          return true;
+    }
+          else{
+            // System.out.println("wrist "+m_WristPIDController.atSetpoint());
+          
+    return false;
+          }
   }
 
   public void setPoint(double setPoint)

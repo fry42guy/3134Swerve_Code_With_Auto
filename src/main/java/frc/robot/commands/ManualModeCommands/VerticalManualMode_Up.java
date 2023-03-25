@@ -32,7 +32,7 @@ public class VerticalManualMode_Up extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_VerticalSubsystem.setSpeed(0);
+    m_VerticalSubsystem.setSpeed(-.06);
   }
 
   // Returns true when the command should end.

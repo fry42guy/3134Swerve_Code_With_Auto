@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,8 @@ Arm_Motor_Left = new TalonFX(Constants.Arm_Intake_Left_ID);
 
 Arm_Motor_Left.setSelectedSensorPosition(0);
 Arm_Motor_Right.setSelectedSensorPosition(0);
+Arm_Motor_Left.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 25);
+Arm_Motor_Right.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 25);
   }
 
   @Override

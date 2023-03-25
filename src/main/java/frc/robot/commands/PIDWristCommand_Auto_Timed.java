@@ -9,21 +9,25 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.HorizontalSubsystem;
+import frc.robot.subsystems.WristSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 
-public class PIDHorizontalCommand_Auto extends CommandBase {
-  /** Creates a new PIDHorizontalCommand. */
-  private PIDController m_HorizontalPIDController;
-  private final HorizontalSubsystem m_HorizontalSubsystem;
+public class PIDWristCommand_Auto_Timed extends CommandBase {
+  /** Creates a new PIDWristCommand. */
+  private PIDController m_WristPIDController;
+  private final WristSubsystem m_WristSubsystem;
   private double setPoint;
-  public PIDHorizontalCommand_Auto(HorizontalSubsystem m_HorizontalSubsystem, double setPoint) {
-    this.m_HorizontalSubsystem = m_HorizontalSubsystem;
-    m_HorizontalPIDController = new PIDController(.004, 0.00000001, 0.0);
+  double Time;
+  Timer m_Timer; 
+  public PIDWristCommand_Auto_Timed(WristSubsystem m_WristSubsystem, double setPoint,double Time_Seconds) {
+    this.m_WristSubsystem = m_WristSubsystem;
+    m_WristPIDController = new PIDController(.0004, 0.00005, 0.0);
+    this.Time = Time_Seconds;
     
-   // m_HorizontalPIDController.enableContinuousInput(-1, 1);
-    m_HorizontalPIDController.setTolerance(1000);
+   // m_WristPIDController.enableContinuousInput(-1, 1);
+    m_WristPIDController.setTolerance(1000);
     this.setPoint = setPoint;
-    addRequirements(m_HorizontalSubsystem);
+    addRequirements(m_WristSubsystem);
 
     
 
@@ -32,39 +36,44 @@ public class PIDHorizontalCommand_Auto extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Timer.restart();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
     double feedforward = -0.05;
-    double speed = m_HorizontalPIDController.calculate(m_HorizontalSubsystem.getAbsoluteEncoderCounts(), setPoint);
+    double speed = m_WristPIDController.calculate(m_WristSubsystem.getAbsoluteEncoderCounts(), setPoint);
     speed = (speed > 0) ? speed + feedforward : speed - feedforward;
     speed = (speed > 1 ) ? 1.0 : speed;
     speed = (speed < -1 ) ? -1 : speed; 
-    m_HorizontalSubsystem.setSpeed(speed* Constants.Horizontal_PID_Speed);
-   // SmartDashboard.putBoolean("Horizontal True", m_HorizontalPIDController.atSetpoint());
+    m_WristSubsystem.setSpeed(speed* Constants.Wrist_PID_Speed);
+   
+    //SmartDashboard.putBoolean("Wrist True", m_WristPIDController.atSetpoint());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) 
   {
-    m_HorizontalSubsystem.setSpeed(0);
+    m_WristSubsystem.setSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //System.out.println("horiz "+m_HorizontalPIDController.atSetpoint());
+    
+    if(m_Timer.get() > Time){ //(m_WristPIDController.atSetpoint())
 
-    if(m_HorizontalPIDController.atSetpoint()){
-      System.out.println("horiz "+m_HorizontalPIDController.atSetpoint());
+      System.out.println("wrist "+m_WristPIDController.atSetpoint());
+    
           return true;
     }
           else{
-            //System.out.println("horiz "+m_HorizontalPIDController.atSetpoint());
+            // System.out.println("wrist "+m_WristPIDController.atSetpoint());
+          
     return false;
           }
   }

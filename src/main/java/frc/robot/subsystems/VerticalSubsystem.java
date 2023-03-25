@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +32,8 @@ Verticalmotor.configForwardSoftLimitThreshold(Constants.Vertical_Limit_High);
 Verticalmotor.configForwardSoftLimitEnable(true);
 Verticalmotor.configReverseSoftLimitEnable(true);
 Verticalmotor.setNeutralMode(NeutralMode.Brake);
+Verticalmotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration( true, 50 , 55, 1.0));
+Verticalmotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 25);
 ///////////////*************///////////////
 
   }

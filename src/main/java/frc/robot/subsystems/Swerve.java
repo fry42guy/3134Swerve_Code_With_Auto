@@ -20,12 +20,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Optional;
+import java.util.function.ToDoubleFunction;
+import java.lang.*;
 
 //import org.photonvision.EstimatedRobotPose;
 
@@ -40,11 +43,13 @@ public class Swerve extends SubsystemBase {
 
 
     public Swerve() {
-       gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
+       //gyro = new AHRS(SPI.Port.kMXP, (byte) 200); // gyro = new AHRS(I2C.Port.kMXP, (byte) 200);
+       gyro = new AHRS(I2C.Port.kOnboard);
         //gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore);
        // gyro.configFactoryDefault();
        gyro.reset(); 
        zeroGyro();
+       
        // photonCam = new PhotonVision();
 
         mSwerveMods = new SwerveModule[] {
@@ -66,7 +71,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getPitch(){
-        return gyro.getPitch();
+             
+        return  gyro.getPitch();
     }
     public double getRoll(){
         return gyro.getRoll();
@@ -87,7 +93,7 @@ public class Swerve extends SubsystemBase {
                                     rotation)
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
-
+SmartDashboard.putNumber("nax x yaw", gyro.getYaw());
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
@@ -155,17 +161,21 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro(){
-        //gyro.setYaw(0);
-        gyro.setAngleAdjustment(180);
+        gyro.zeroYaw();
+        
+        
+       // gyro.setAngleAdjustment(180);
+        
     }
 
-    public void reverseZeroGyro() {
-        gyro.setAngleAdjustment(180);
-        // gyro.setYaw(180);
-    }
+    // public void reverseZeroGyro() {
+    //     gyro.setAngleAdjustment(180);
+    //     // gyro.setYaw(180);
+    // }
 
     public Rotation2d getYaw() {
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees( gyro.getYaw() *-1) : Rotation2d.fromDegrees(gyro.getYaw()); //"306-""
+
     }
 
 

@@ -18,7 +18,7 @@ public class PIDHorizontalCommand extends CommandBase {
   private double setPoint;
   public PIDHorizontalCommand(HorizontalSubsystem m_HorizontalSubsystem, double setPoint) {
     this.m_HorizontalSubsystem = m_HorizontalSubsystem;
-    m_HorizontalPIDController = new PIDController(.0004, 0., 0.0);
+    m_HorizontalPIDController = new PIDController(.0002, 0., 0.0);
     
    // m_HorizontalPIDController.enableContinuousInput(-1, 1);
     m_HorizontalPIDController.setTolerance(0.0035);
