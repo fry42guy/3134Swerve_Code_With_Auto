@@ -83,7 +83,7 @@ y_Speed = getPitchSpeed();
 x_Speed = getRollSpeed();
 
 
-Split_Time = Math.round( m_Timer.get()*2);
+Split_Time = Math.round( m_Timer.get()*3);
 
 if(Split_Time % 2 == 0){
   s_Swerve.drive(
