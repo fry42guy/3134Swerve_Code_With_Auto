@@ -106,8 +106,9 @@ public class RobotContainer {
     autoChooser_Path.addOption("ScoreHighCone_Backup", PathPlanner.loadPathGroup("ScoreHighCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoChooser_Path.addOption("ScoreMidCone_Backup", PathPlanner.loadPathGroup("ScoreMidCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoChooser_Path.addOption("ScoreHighCone_Cone_Charge", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond+1.5, AutoConstants.kMaxAccelerationMetersPerSecondSquared+1)));
-    autoChooser_Path.addOption("ScoreMid_Charge", PathPlanner.loadPathGroup("ScoreMid_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreMidCone_Charge", PathPlanner.loadPathGroup("ScoreMidCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoChooser_Path.addOption("ScoreHighCone_Charge",PathPlanner.loadPathGroup("ScoreHighCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreMidCube_Charge", PathPlanner.loadPathGroup("ScoreMidCube_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoTab.add(autoChooser_Path);
 
   }
@@ -166,8 +167,25 @@ new ParallelCommandGroup(
     new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
 );
 
+
+
+Constants.AutoConstants.eventMap.put("Shoot_Cube_Mid", new SequentialCommandGroup(
+
+(new PIDVerticalCommand(m_Vertical, Constants.Cone_Cube_MID_Vert)),
+(new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Cube_MID_Hori)),
+(new PIDWristCommand(m_Wrist, Constants.Cone_Cube_MID_Wrist)),
+
+new ParallelCommandGroup(
+  new AutoShoot(m_ArmIntakeSubsystem, -.45, 1)
+)
+
+));
+
+
 Constants.AutoConstants.eventMap.put("Auto_Balance", new Auto_Balance_With_Nav_X(s_Swerve));
   }
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -220,6 +238,9 @@ public void zeroGyro() {
   s_Swerve.zeroGyro();
 }
   private void configureBindings() {
+
+
+    Config_Auto_Buttons();
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
@@ -242,33 +263,6 @@ new JoystickButton(m_Operator_Controller, XboxController.Button.kLeftBumper.valu
 .onTrue(new InstantCommand(
 ()-> M_PCM.ClawOpen()
 ));
-
-
-
-new JoystickButton(m_Drive_Controller, XboxController.Button.kStart.value)
-.onTrue((new Auto_Balance_With_Nav_X(s_Swerve)))
-.onFalse(new TeleopSwerve(
-  s_Swerve, 
-
-  () -> m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
-  () -> m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
-  () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX())*-1, 
-  () -> false //() -> robotCentric.getAsBoolean() //always field centric
-));
-
-new JoystickButton(m_Drive_Controller, XboxController.Button.kBack.value)
-.onTrue(new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
-new ParallelCommandGroup( 
-( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
-(new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
-( new PIDWristCommand_Auto(m_Wrist,50095-8000))),
-
-new ParallelCommandGroup(
-new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
-);
-
-
-
 
 
 
@@ -506,6 +500,40 @@ new Trigger(() ->
    return buildAuto(autoChooser_Path.getSelected());
 }
 
+public void Config_Auto_Buttons(){
+
+
+  new JoystickButton(m_Drive_Controller, XboxController.Button.kStart.value)
+  .onTrue((new Auto_Balance_With_Nav_X(s_Swerve)))
+  .onFalse(new TeleopSwerve(
+    s_Swerve, 
+  
+    () -> m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
+    () -> m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
+    () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX())*-1, 
+    () -> false //() -> robotCentric.getAsBoolean() //always field centric
+  ));
+  
+  new JoystickButton(m_Drive_Controller, XboxController.Button.kBack.value)
+  .onTrue(new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
+  new ParallelCommandGroup( 
+  ( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
+  (new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
+  ( new PIDWristCommand_Auto(m_Wrist,50095-8000))),
+  
+  new ParallelCommandGroup(
+  new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
+  );
+  
+  
+  
+  
+  
+
+
+
+  
+}
 
 public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
   //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
