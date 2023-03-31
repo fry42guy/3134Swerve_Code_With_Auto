@@ -109,6 +109,8 @@ public class RobotContainer {
     autoChooser_Path.addOption("ScoreMidCone_Charge", PathPlanner.loadPathGroup("ScoreMidCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoChooser_Path.addOption("ScoreHighCone_Charge",PathPlanner.loadPathGroup("ScoreHighCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoChooser_Path.addOption("ScoreMidCube_Charge", PathPlanner.loadPathGroup("ScoreMidCube_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreHighCone_Cone_Ready", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Ready", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("ScoreMidCone_Cone_Ready", PathPlanner.loadPathGroup("ScoreMidCone_Cone_Ready", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoTab.add(autoChooser_Path);
 
   }
@@ -151,20 +153,20 @@ new ParallelCommandGroup(
     
         //(new PIDVerticalCommand_Auto(m_Vertical, -1000)),
            // (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cone_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
-            (new PIDWristCommand_Auto(m_Wrist, 87368 -3000)),
+            (new PIDWristCommand_Auto(m_Wrist, 87368 -1500)),
             (new AutoShoot(m_ArmIntakeSubsystem, -.45, 5))));
     
 Constants.AutoConstants.eventMap.put("Shoot_Cone_High", new SequentialCommandGroup(
 
 
 new ParallelCommandGroup(
- (new PIDVerticalCommand_Auto(m_Vertical,-150000-3500)),
-  (new PIDHorizontalCommand_Auto(m_Horizontal, 103018 )),
-  (new PIDWristCommand_Auto(m_Wrist,35000-10000))),
+ (new PIDVerticalCommand_Auto(m_Vertical,Constants.Cone_Shoot_High_Vert)),//-150000-3500
+  (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Shoot_High_Hori)), //103018
+  (new PIDWristCommand_Auto(m_Wrist,Constants.Cone_Shoot_High_Wrist))), //35000-10000
   
   
   new ParallelCommandGroup(
-    new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
+    new AutoShoot(m_ArmIntakeSubsystem, .45, .75)))
 );
 
 
@@ -514,16 +516,35 @@ public void Config_Auto_Buttons(){
     () -> false //() -> robotCentric.getAsBoolean() //always field centric
   ));
   
+
+
+
   new JoystickButton(m_Drive_Controller, XboxController.Button.kBack.value)
   .onTrue(new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
   new ParallelCommandGroup( 
-  ( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
-  (new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
-  ( new PIDWristCommand_Auto(m_Wrist,50095-8000))),
+  // ( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
+  // (new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
+  // ( new PIDWristCommand_Auto(m_Wrist,50095-8000))),
+
+  // (new PIDVerticalCommand_Auto(m_Vertical, Constants.Cone_Cube_MID_Vert)),
+  // (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Cube_MID_Hori)),
+  // (new PIDWristCommand_Auto(m_Wrist, Constants.Cone_Cube_MID_Wrist))),
+
+  // (new PIDVerticalCommand_Auto(m_Vertical,-150000-3500)),
+  // (new PIDHorizontalCommand_Auto(m_Horizontal, 103018 )),
+  // (new PIDWristCommand_Auto(m_Wrist,35000-10000))),
+
+  (new PIDVerticalCommand_Auto(m_Vertical,Constants.Cone_Shoot_High_Vert)),
+  (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Shoot_High_Hori )),
+  (new PIDWristCommand_Auto(m_Wrist,Constants.Cone_Shoot_High_Wrist))),
+
+  // (new PIDVerticalCommand_Auto(m_Vertical, Constants.Cube_High_Auto_Vert)),
+  // (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cube_High_Auto_Hori)),
+  // (new PIDWristCommand_Auto(m_Wrist, Constants.Cube_High_Auto_Wrist-6000))),
   
-  new ParallelCommandGroup(
-  new AutoShoot(m_ArmIntakeSubsystem, .45, 1)))
-  );
+ 
+  new AutoShoot(m_ArmIntakeSubsystem, .45, .75)))
+  ;
   
   
   

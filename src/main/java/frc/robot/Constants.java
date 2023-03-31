@@ -80,7 +80,7 @@ public static final double BB_Hori = 100;
 
 //Floor Pick up Cube/Cone(LB) new arm cone
 public static final double Floor_Cone_Vert = -4000;
-public static final double Floor_Cone_Wrist = 89368-4000;
+public static final double Floor_Cone_Wrist = 89368-1500; //-4000
 public static final double Floor_Cone_Hori = 100;
 
 //Score Cone/Cube MID (LT) new arm
@@ -101,12 +101,17 @@ public static final double Cone_Cube_Travel_Hori = 100;
 
 //Pickup Player Station (B)cube high
 public static final double Cube_Player_Station_Vert = -177192;
-public static final double Cube_Player_Station_Wrist = 35000;
+public static final double Cube_Player_Station_Wrist = 37000;
 public static final double Cube_Player_Station_Hori = 80000;
+
+public static final double Cube_High_Auto_Vert = -177192;
+public static final double Cube_High_Auto_Wrist = 35000;
+public static final double Cube_High_Auto_Hori = 80000;
+
 
 //Pickup Player Station (Y) New arm cone cube
 public static final double Cone_Player_Station_Vert = -177192;
-public static final double Cone_Player_Station_Wrist = 65000-3000;
+public static final double Cone_Player_Station_Wrist = 65000-1500;
 public static final double Cone_Player_Station_Hori = 00;
 
 
