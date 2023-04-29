@@ -43,7 +43,7 @@ Arm_Motor_Right.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 25);
 
   public void setSpeed(double speed)
   {
-    Arm_Motor_Left.set(ControlMode.PercentOutput, speed);
+    Arm_Motor_Left.set(ControlMode.PercentOutput, speed);//0
     Arm_Motor_Right.set(ControlMode.PercentOutput, speed*2);
   }
 

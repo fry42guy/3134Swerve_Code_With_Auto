@@ -101,15 +101,15 @@ public class RobotContainer {
 
   public void setUpAutos() {
     setUpEventMap();
-    autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("Not_Simple", PathPlanner.loadPathGroup("Not_Simple", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("ScoreHighCone_Backup", PathPlanner.loadPathGroup("ScoreHighCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("ScoreMidCone_Backup", PathPlanner.loadPathGroup("ScoreMidCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("ScoreHighCone_Cone_Charge", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond+1.5, AutoConstants.kMaxAccelerationMetersPerSecondSquared+1)));
-    autoChooser_Path.addOption("ScoreMidCone_Charge", PathPlanner.loadPathGroup("ScoreMidCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("ScoreHighCone_Charge",PathPlanner.loadPathGroup("ScoreHighCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("ScoreMidCube_Charge", PathPlanner.loadPathGroup("ScoreMidCube_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
-    autoChooser_Path.addOption("ScoreHighCone_Cone_Ready", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Ready", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    //autoChooser_Path.setDefaultOption("Simple", PathPlanner.loadPathGroup("Simple", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    //autoChooser_Path.addOption("Not_Simple", PathPlanner.loadPathGroup("Not_Simple", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    //autoChooser_Path.addOption("ScoreHighCone_Backup", PathPlanner.loadPathGroup("ScoreHighCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.setDefaultOption("ScoreMidCone_Backup", PathPlanner.loadPathGroup("ScoreMidCone_Backup", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+   // autoChooser_Path.addOption("ScoreHighCone_Cone_Charge", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond+1.5, AutoConstants.kMaxAccelerationMetersPerSecondSquared+1)));
+   // autoChooser_Path.addOption("ScoreMidCone_Charge", PathPlanner.loadPathGroup("ScoreMidCone_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    autoChooser_Path.addOption("MidCone_Out_Charge",PathPlanner.loadPathGroup("MidCone_Out_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    //autoChooser_Path.addOption("ScoreMidCube_Charge", PathPlanner.loadPathGroup("ScoreMidCube_Charge", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
+    //autoChooser_Path.addOption("ScoreHighCone_Cone_Ready", PathPlanner.loadPathGroup("ScoreHighCone_Cone_Ready", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoChooser_Path.addOption("ScoreMidCone_Cone_Ready", PathPlanner.loadPathGroup("ScoreMidCone_Cone_Ready", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared)));
     autoTab.add(autoChooser_Path);
 
@@ -134,14 +134,18 @@ Constants.AutoConstants.eventMap.put("Travel", new ParallelCommandGroup(
 (new PIDHorizontalCommand_Auto(m_Horizontal, -100)),
 (new PIDWristCommand_Auto(m_Wrist, 500))));
 
+Constants.AutoConstants.eventMap.put("Lob_Cone", new ParallelCommandGroup(
+  new AutoShoot(m_ArmIntakeSubsystem, .5, 1)
+));
+
 
 
 Constants.AutoConstants.eventMap.put("Cube_Floor_Pickup",   new SequentialCommandGroup(
 
 new ParallelCommandGroup( 
-      (new PIDVerticalCommand_Auto(m_Vertical, -1000)),
-          (new PIDHorizontalCommand_Auto(m_Horizontal, -100)),
-          (new PIDWristCommand_Auto(m_Wrist, 98000-1500))),
+      (new PIDVerticalCommand_Auto(m_Vertical, Constants.Floor_Cone_Vert)),//-1000
+          (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cone_Hori)),
+          (new PIDWristCommand_Auto(m_Wrist, Constants.Floor_Cone_Wrist))), //98000-1500
 
           new ParallelCommandGroup(
             new AutoShoot(m_ArmIntakeSubsystem, -.45, 1))

@@ -24,6 +24,7 @@ public class IntakeREV extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //System.out.println("intake rev");
 
     m_IntakeSubsystem.setSpeed(Constants.Arm_intake_speed*-1);
   }

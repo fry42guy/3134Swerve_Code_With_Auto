@@ -47,6 +47,7 @@ public class Intake_ADV_BREAK_MODE extends CommandBase {
   @Override
   public void execute() 
   {
+    //System.out.println("adv running");
     double feedforwardl = 0.00;
     double speedL = m_Arm_LeftPIDController.calculate(m_IntakeSubsystem.getAbsoluteEncoderCountsLeft(), 0);
     speedL = (speedL > 0) ? speedL + feedforwardl : speedL - feedforwardl;

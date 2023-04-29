@@ -28,11 +28,13 @@ public class Auto_Balance_With_Nav_X extends CommandBase {
   private double m_Roll_Speed;
 private double x_Speed;
 private double y_Speed;
+ private boolean m_ontop;
 
   private PIDController m_PitchPIDController;
   private PIDController m_RollPidController;
 
   private Timer m_Timer;
+  private Timer m_Timer2;
 
   private double Split_Time;
 
@@ -47,6 +49,9 @@ this.s_Swerve = s_Swerve;
     m_RollPidController = new PIDController(.08, 0, 0);
 
 m_Timer = new Timer();
+m_Timer2 = new Timer();
+
+
 
 m_PitchPIDController.setTolerance(2);
 m_RollPidController.setTolerance(2);
@@ -63,6 +68,8 @@ m_RollPidController.setTolerance(2);
   @Override
   public void initialize() {
     m_Timer.restart();
+    m_ontop = false;
+    m_Timer2.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -72,9 +79,13 @@ m_RollPidController.setTolerance(2);
     m_Pitch = s_Swerve.getPitch();
     m_Roll = s_Swerve.getRoll();
 
+    if(m_Timer2.get()>1){
+      m_ontop = true;
+    }
+
 // SmartDashboard.putNumber("swerve get pitch", s_Swerve.getPitch());
 
-//System.out.println(m_Swerve.getPitch());
+System.out.println("running");
     SmartDashboard.putNumber("Nav_X Pitch", m_Pitch);
     SmartDashboard.putNumber("Nav_X Roll", m_Roll);
 
@@ -84,6 +95,7 @@ x_Speed = getRollSpeed();
 
 
 Split_Time = Math.round( m_Timer.get()*3);
+if (m_ontop==true){
 
 if(Split_Time % 2 == 0){
   s_Swerve.drive(
@@ -94,6 +106,12 @@ else{
       new Translation2d(-x_Speed,-y_Speed),0,false,true);
 }
 }
+
+if (m_ontop ==false){
+  s_Swerve.drive( new Translation2d(-x_Speed,-y_Speed),0,false,true);}
+
+}
+
 
   // Called once the command ends or is interrupted.
   @Override
