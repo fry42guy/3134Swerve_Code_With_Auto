@@ -44,7 +44,8 @@ public class Swerve extends SubsystemBase {
 
     public Swerve() {
        //gyro = new AHRS(SPI.Port.kMXP, (byte) 200); // gyro = new AHRS(I2C.Port.kMXP, (byte) 200);
-       gyro = new AHRS(I2C.Port.kOnboard);
+      // gyro = new AHRS(I2C.Port.kOnboard);
+      gyro = new AHRS(I2C.Port.kOnboard);
         //gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore);
        // gyro.configFactoryDefault();
        gyro.reset(); 

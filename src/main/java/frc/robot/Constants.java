@@ -64,53 +64,53 @@ public final class Constants {
   public static final int m_Horizontal = 46; // ArmMotor Falcon 500 CAN ID ###
   public static final double Horizontal_Motor_Speed = .2; 
   public static final double Horizontal_PID_Speed = .4;
-  public static final double Horizontal_Limit_High = 105000 ;
-  public static final double Horizontal_Limit_Low = 0;
+  public static final double Horizontal_Limit_High = 0 ;
+  public static final double Horizontal_Limit_Low = -70000;
   
   // (RT) new arm floor cube
 public static final double Cube_Floor_Pickup_Vert = -4000;
 public static final double Cube_Floor_Pickup_Wrist = 98000;
-public static final double Cube_Floor_Pickup_Hori = 100;
+public static final double Cube_Floor_Pickup_Hori = -100;
 
 //BB(A) new arm
 public static final double BB_Virt = -4000;
 public static final double BB_Wrist =36300;
-public static final double BB_Hori = 100;  
+public static final double BB_Hori = -100;  
 
 
 //Floor Pick up Cube/Cone(LB) new arm cone
 public static final double Floor_Cone_Vert = -4000;
-public static final double Floor_Cone_Wrist = 89368-1500; //-4000
-public static final double Floor_Cone_Hori = 100;
+public static final double Floor_Cone_Wrist = 85868; //-4000
+public static final double Floor_Cone_Hori = -100;
 
 //Score Cone/Cube MID (LT) new arm
 public static final double Cone_Cube_MID_Vert = -55000;
-public static final double Cone_Cube_MID_Wrist = 50095;
-public static final double Cone_Cube_MID_Hori = 80082;
+public static final double Cone_Cube_MID_Wrist = 54095;
+public static final double Cone_Cube_MID_Hori = -80082*.74;
 
 
 //Score Cone/Cube High (x) new arm cone shoot high
 public static final double Cone_Shoot_High_Vert = -150000;//-168192;
 public static final double Cone_Shoot_High_Wrist = 35000;//67000-20000-3000-3000;
-public static final double Cone_Shoot_High_Hori = 103018;
+public static final double Cone_Shoot_High_Hori = -103018*.74;
 
 //Travel w/Cone Cube(RB) new arm
 public static final double Cone_Cube_Travel_Vert = -1000;
 public static final double Cone_Cube_Travel_Wrist = 500;
-public static final double Cone_Cube_Travel_Hori = 100;
+public static final double Cone_Cube_Travel_Hori = -100;
 
 //Pickup Player Station (B)cube high
 public static final double Cube_Player_Station_Vert = -177192;
 public static final double Cube_Player_Station_Wrist = 37000;
-public static final double Cube_Player_Station_Hori = 80000;
+public static final double Cube_Player_Station_Hori = -80000*.74;
 
 public static final double Cube_High_Auto_Vert = -177192;
 public static final double Cube_High_Auto_Wrist = 35000;
-public static final double Cube_High_Auto_Hori = 80000;
+public static final double Cube_High_Auto_Hori = -80000*.74;
 
 
 //Pickup Player Station (Y) New arm cone cube
-public static final double Cone_Player_Station_Vert = -177192;
+public static final double Cone_Player_Station_Vert = -177192+10000;
 public static final double Cone_Player_Station_Wrist = 65000-1500;
 public static final double Cone_Player_Station_Hori = 00;
 
@@ -195,7 +195,7 @@ public static final double Cone_Player_Station_Hori = 00;
     /** Meters per Second */
     public static final double maxSpeed = 4; //TODO: This must be tuned to specific robot
     /** Radians per Second */
-    public static final double maxAngularVelocity = 3; //TODO: This must be tuned to specific robot #############################################
+    public static final double maxAngularVelocity = 4; //TODO: This must be tuned to specific robot #############################################
 
     /* Neutral Modes */
     public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -220,7 +220,7 @@ public static final double Cone_Player_Station_Hori = 00;
         public static final int driveMotorID = 6;
         public static final int angleMotorID = 5;
         public static final int canCoderID = 3;
-        public static final Rotation2d angleOffset = Rotation2d.fromDegrees(55.27); //+180
+        public static final Rotation2d angleOffset = Rotation2d.fromDegrees(53.6); //+180
 
         public static final SwerveModuleConstants constants = 
             new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -232,7 +232,7 @@ public static final double Cone_Player_Station_Hori = 00;
         public static final int driveMotorID = 2;
         public static final int angleMotorID = 1;
         public static final int canCoderID = 1;
-        public static final Rotation2d angleOffset = Rotation2d.fromDegrees(113.104+180);
+        public static final Rotation2d angleOffset = Rotation2d.fromDegrees(298);//113.104+180
 
         public static final SwerveModuleConstants constants = 
             new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);

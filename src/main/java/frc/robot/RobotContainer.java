@@ -92,7 +92,7 @@ public class RobotContainer {
   public RobotContainer() {
    
     // Configure the trigger bindings
-   // CameraServer.startAutomaticCapture(0);
+   CameraServer.startAutomaticCapture(0);
     setUpEventMap();
     configureBindings();
     m_ArmIntakeSubsystem.setDefaultCommand(new Intake_ADV_BREAK_MODE(m_ArmIntakeSubsystem));
@@ -121,7 +121,7 @@ public class RobotContainer {
     Constants.AutoConstants.eventMap.put("Shoot_Cone_Mid", new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
     new ParallelCommandGroup( 
     ( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
-    (new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
+    (new PIDHorizontalCommand_Auto(m_Horizontal,-20082)),
     ( new PIDWristCommand_Auto(m_Wrist,50095-2000))),
     
     new ParallelCommandGroup(
@@ -131,7 +131,7 @@ public class RobotContainer {
 Constants.AutoConstants.eventMap.put("Travel", new ParallelCommandGroup(
 
   (new PIDVerticalCommand_Auto(m_Vertical, 0)),
-(new PIDHorizontalCommand_Auto(m_Horizontal, 100)),
+(new PIDHorizontalCommand_Auto(m_Horizontal, -100)),
 (new PIDWristCommand_Auto(m_Wrist, 500))));
 
 
@@ -140,7 +140,7 @@ Constants.AutoConstants.eventMap.put("Cube_Floor_Pickup",   new SequentialComman
 
 new ParallelCommandGroup( 
       (new PIDVerticalCommand_Auto(m_Vertical, -1000)),
-          (new PIDHorizontalCommand_Auto(m_Horizontal, 100)),
+          (new PIDHorizontalCommand_Auto(m_Horizontal, -100)),
           (new PIDWristCommand_Auto(m_Wrist, 98000-1500))),
 
           new ParallelCommandGroup(
@@ -150,10 +150,12 @@ new ParallelCommandGroup(
     
        Constants.AutoConstants.eventMap.put("Floor_Cone_Pickup",   new ParallelCommandGroup(
       
-    
-        //(new PIDVerticalCommand_Auto(m_Vertical, -1000)),
-           // (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Floor_Cone_Hori + Constants.Horizontal_PID_Tolerance_Offset)),
-            (new PIDWristCommand_Auto(m_Wrist, 87368 -1500)),
+       (new PIDVerticalCommand_Auto(m_Vertical, 0)),
+       (new PIDHorizontalCommand_Auto(m_Horizontal, -100)),
+       (new PIDWristCommand_Auto(m_Wrist, 87368 -500)),
+            // (new PIDVerticalCommand_Auto(m_Vertical, 0)),
+            // (new PIDHorizontalCommand_Auto(m_Horizontal, 100)),
+            // (new PIDWristCommand_Auto(m_Wrist, 87368 -1500)),
             (new AutoShoot(m_ArmIntakeSubsystem, -.45, 5))));
     
 Constants.AutoConstants.eventMap.put("Shoot_Cone_High", new SequentialCommandGroup(
@@ -212,8 +214,8 @@ public void scheduleDefaultTeleop() {
           // () -> -modifyAxis(m_Drive_Controller.getLeftX()*.8), //* DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
           // () -> -modifyAxis(m_Drive_Controller.getRightX()*.7),// * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
  
-          () -> m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.8, 
-          () -> m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.8, 
+          () -> m_Drive_Controller.getLeftY()*Math.abs(m_Drive_Controller.getLeftY())*.9, 
+          () -> m_Drive_Controller.getLeftX()*Math.abs(m_Drive_Controller.getLeftX())*.9, 
           () -> m_Drive_Controller.getRightX()*Math.abs(m_Drive_Controller.getRightX())*-1, 
           () -> false //() -> robotCentric.getAsBoolean() //always field centric
       )
@@ -520,7 +522,7 @@ public void Config_Auto_Buttons(){
 
 
   new JoystickButton(m_Drive_Controller, XboxController.Button.kBack.value)
-  .onTrue(new SequentialCommandGroup( // runs a group sequentialy between the ( ) 
+  .onTrue( // runs a group sequentialy between the ( ) 
   new ParallelCommandGroup( 
   // ( new PIDVerticalCommand_Auto(m_Vertical, -55000+(-3500))),
   // (new PIDHorizontalCommand_Auto(m_Horizontal,80082-60000)),
@@ -534,16 +536,20 @@ public void Config_Auto_Buttons(){
   // (new PIDHorizontalCommand_Auto(m_Horizontal, 103018 )),
   // (new PIDWristCommand_Auto(m_Wrist,35000-10000))),
 
-  (new PIDVerticalCommand_Auto(m_Vertical,Constants.Cone_Shoot_High_Vert)),
-  (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cone_Shoot_High_Hori )),
-  (new PIDWristCommand_Auto(m_Wrist,Constants.Cone_Shoot_High_Wrist))),
+  // (new PIDVerticalCommand(m_Vertical,Constants.Cone_Shoot_High_Vert)),
+  // (new PIDHorizontalCommand(m_Horizontal, Constants.Cone_Shoot_High_Hori )),
+  // (new PIDWristCommand(m_Wrist,Constants.Cone_Shoot_High_Wrist))))
+
+  (new PIDVerticalCommand_Auto(m_Vertical, 0)),
+  (new PIDHorizontalCommand_Auto(m_Horizontal, -100)),
+  (new PIDWristCommand_Auto(m_Wrist, 87368 -500))))
 
   // (new PIDVerticalCommand_Auto(m_Vertical, Constants.Cube_High_Auto_Vert)),
   // (new PIDHorizontalCommand_Auto(m_Horizontal, Constants.Cube_High_Auto_Hori)),
   // (new PIDWristCommand_Auto(m_Wrist, Constants.Cube_High_Auto_Wrist-6000))),
   
  
-  new AutoShoot(m_ArmIntakeSubsystem, .45, .75)))
+ 
   ;
   
   
