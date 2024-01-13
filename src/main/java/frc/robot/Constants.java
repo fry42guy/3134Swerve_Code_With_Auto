@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
@@ -25,6 +26,55 @@ import frc.lib.util.SwerveModuleConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+
+    public final class Motor1 {
+        public static final int CANID = 0;
+        public static final double FWDSpeed = 1.0;
+        public static final double REVSpeed = -1.0;
+        public static final int FWDButton = Constants.XboxButtonvalues.kA;
+        public final static int REVButton = Constants.XboxButtonvalues.kB;
+    }
+    public final class Motor2 {
+        public static final int CANID = 0;
+        public static final double FWDSpeed = 1.0;
+        public static final double REVSpeed = -1.0;
+        public static final int FWDButton = Constants.XboxButtonvalues.kX;
+        public final static int REVButton = Constants.XboxButtonvalues.kY;
+        
+            }   
+    public final class Motor3 {
+        public static final int CANID = 0;
+        public static final double FWDSpeed = 1.0;
+        public static final double REVSpeed = -1.0;
+        public static final int FWDButton = Constants.XboxButtonvalues.kLeftBumper;
+        public final static int REVButton = Constants.XboxButtonvalues.kRightBumper;
+            }
+    public final class Motor4 {
+        public static final int CANID = 0;
+        public static final double FWDSpeed = 1.0;
+        public static final double REVSpeed = -1.0;
+        public static final int FWDButton = Constants.XboxButtonvalues.kLeftStick;
+        public final static int REVButton = Constants.XboxButtonvalues.kRightStick;
+            }
+
+
+
+public final class XboxButtonvalues{
+
+    public static final int kLeftBumper = 5;
+    public static final int kRightBumper = 6;
+    public static final int kLeftStick = 9;
+    public static final int kRightStick = 10;
+    public static final int kA = 1;
+    public static final int kB = 2;
+    public static final int kX = 3;
+    public static final int kY = 4;
+    public static final int kBack = 7;
+    public static final int kStart = 8;
+
+}
+
 
 
   public static final double stickDeadband = 0.05;
